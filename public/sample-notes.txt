@@ -1,0 +1,13 @@
+LAVINDU MANETH — MATHEMATICS
+Illustrative practice notes — demo content, not a teacher-issued lesson.
+
+Solving a linear equation
+2x + 6 = 14
+Subtract 6 from both sides: 2x = 8
+Divide both sides by 2: x = 4
+Check: 2(4) + 6 = 14
+
+Try it yourself:
+1. 3x + 5 = 20
+2. 4x - 8 = 12
+Answers: 1. x = 5; 2. x = 5.
