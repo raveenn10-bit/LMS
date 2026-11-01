@@ -1,24 +1,22 @@
 {
   "name": "lavindu-maneth-lms",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "scripts": {"dev":"next dev","build":"next build","start":"next start"},
   "dependencies": {
-    "next": "16.3.4",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "lucide-react": "^1.31.0"
+    "@supabase/ssr":"0.12.7",
+    "@supabase/supabase-js":"2.118.0",
+    "lucide-react":"^1.31.0",
+    "next":"16.3.4",
+    "react":"19.2.6",
+    "react-dom":"19.2.6"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.2.1",
-    "tailwindcss": "4.2.1",
-    "typescript": "5.9.3",
-    "@types/node": "22.19.19",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
+    "@tailwindcss/postcss":"4.2.1",
+    "@types/node":"22.19.19",
+    "@types/react":"19.2.14",
+    "@types/react-dom":"19.2.3",
+    "tailwindcss":"4.2.1",
+    "typescript":"5.9.3"
   }
 }
