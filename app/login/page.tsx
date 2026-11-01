@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { AuthForm } from "@/components/auth-form";
 
 export default function LoginPage() {
@@ -13,7 +14,11 @@ export default function LoginPage() {
         </div>
         <small>Lavindu Maneth · Mathematics</small>
       </section>
-      <section className="auth-form-panel"><AuthForm/></section>
+      <section className="auth-form-panel">
+        <Suspense fallback={<div className="auth-card">Loading secure login…</div>}>
+          <AuthForm/>
+        </Suspense>
+      </section>
     </main>
   );
 }
