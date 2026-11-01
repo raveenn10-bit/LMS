@@ -52,6 +52,15 @@ export function AuthForm() {
         if (loginError) throw loginError;
       }
 
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Login session එක create කරන්න බැරි වුණා. නැවත try කරන්න.");
+      const { data: profile } = await supabase.from("lms_profiles").select("role").eq("id", user.id).single();
+      if (profile?.role === "admin") {
+        await supabase.auth.signOut();
+        setError("මේක Student Login එක. Admin account එකෙන් /admin/login page එක භාවිතා කරන්න.");
+        return;
+      }
+
       router.replace("/dashboard");
       router.refresh();
     } catch (caught) {
