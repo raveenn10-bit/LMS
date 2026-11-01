@@ -39,13 +39,12 @@ export function AuthForm() {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: { full_name: fullName, phone },
           },
         });
         if (signUpError) throw signUpError;
         if (!data.session) {
-          setMessage("Account එක හදලා තියෙනවා. Email verification link එක open කරන්න.");
+          setError("Account එක හැදුණා, නමුත් auto-login setting එක තවම active නැහැ. Admin එකට දැනුම් දෙන්න.");
           return;
         }
       } else {
