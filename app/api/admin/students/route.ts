@@ -36,3 +36,29 @@ export async function POST(request: Request) {
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
   return NextResponse.json({ id: data.user.id, email: data.user.email, message: "Student account created and email confirmed." }, { status: 201 });
 }
+
+export async function PATCH(request: Request) {
+  const sessionClient = await createClient();
+  const { data: { user } } = await sessionClient.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Admin login required." }, { status: 401 });
+  const { data: profile } = await sessionClient.from("lms_profiles").select("role").eq("id", user.id).single();
+  if (profile?.role !== "admin") return NextResponse.json({ error: "Admin access required." }, { status: 403 });
+
+  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!secret) return NextResponse.json({ error: "Server account management is not configured." }, { status: 503 });
+  let payload: { studentId?: string; password?: string };
+  try { payload = await request.json(); } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
+  const studentId = payload.studentId || "";
+  const password = payload.password || "";
+  if (!studentId || password.length < 8) return NextResponse.json({ error: "Enter a password with at least 8 characters." }, { status: 400 });
+  const { data: student } = await sessionClient.from("lms_profiles").select("id,role,email").eq("id", studentId).single();
+  if (!student || student.role !== "student") return NextResponse.json({ error: "Student account not found." }, { status: 404 });
+
+  const adminClient = createSupabaseClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, secret, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  const { error } = await adminClient.auth.admin.updateUserById(studentId, { password, email_confirm: true });
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  await sessionClient.from("lms_audit_logs").insert({admin_id:user.id,action:"student_password_reset",entity_type:"profile",entity_id:studentId,details:{email:student.email}});
+  return NextResponse.json({ message: "Student password updated." });
+}
